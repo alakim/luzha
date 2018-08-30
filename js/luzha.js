@@ -113,6 +113,12 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		},
 		appWindow:function(){
 			return window.frames[0];
+		},
+		setContinuation:function(continuation){
+			Luzha.appWindow().continuation = ()=>{
+				Luzha.appWindow().continuation = null;
+				continuation();
+			};
 		}
 	};
 
