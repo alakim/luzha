@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Sample Application</title>
+	<style>
+		body{
+			background-color:#124;
+			color:#ffe;
+			font-family:Verdana, Arial, Sans-Serif;
+		}
+		#out{
+			background-color:#222;
+			color:#0f0;
+			font-family: Courier New, Monospace;
+			width:90%;
+			height:200px;
+			padding:5px;
+			border: 1px solid #eee;
+		}
+	</style>
+	<script src="../js/lib/jquery-3.1.1.min.js"></script>
+	<script>
+		function log(m){
+			$('#out').append(`<div>${m}</div>`);
+		}
+
+		function test1(){
+			log('Test 1');
+		}
+
+		$(function(){
+			$('.btT1').click(test1);
+		});
+	</script>
+</head>
+<body>
+	<h1>Sample Application</h1>
+	<div>
+		<button class="btT1">Test 1</button>
+	</div>
+	<div id="out"></div>
+</body>
+</html>
