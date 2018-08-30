@@ -4,6 +4,7 @@ Luzha.Test('Test 2', function($, $L, onComplete){
 		.then(()=>new Promise(resolve=>{
 			$L.appWindow().continuation = ()=>{
 				console.log('continued!');
+				$L.appWindow().continuation = null;
 				resolve();
 			};
 			$L.click('.btT2');

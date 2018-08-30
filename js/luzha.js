@@ -33,7 +33,11 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				padding:px(5)
 			},
 			' .testList':{
-				padding:px(0, 15)
+				padding:px(0, 15),
+				' .btStartTest':{
+					'.started':{backgroundColor:'#ffa'},
+					'.performed':{backgroundColor:'#0e0'}
+				}
 			}
 		},
 		'#frmApp':{
@@ -47,6 +51,19 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 	function init(){
 		const {markup,apply,h1,div,span,button} = $H;
+
+		function runTest(idx, continued){
+			if(idx>=tests.length) return;
+			const testButton = $(`.btStartTest:eq(${idx})`);
+			testButton.removeClass('performed');
+			testButton.addClass('started');
+			tests[idx].action($, Luzha, ()=>{
+				testButton.removeClass('started');
+				testButton.addClass('performed');
+				if(continued) runTest(idx+1);
+			});
+		}
+
 		$('body')
 			.html(markup(
 				div({id:'pnlMain'},
@@ -61,17 +78,10 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				$C.html.iframe({id:'frmApp'})
 			))
 			.find('#btStart').click(function(){
-				function runTest(idx){
-					if(idx>=tests.length) return;
-					tests[idx].action($, Luzha, ()=>{
-						runTest(idx+1);
-					});
-				}
-				runTest(0);
+				runTest(0, true);
 			}).end()
 			.find('.btStartTest').click(function(){
-				const idx = $(this).attr('data-idx');
-				tests[idx].action($, Luzha, ()=>{});
+				runTest($(this).attr('data-idx'));
 			}).end()
 		;
 
