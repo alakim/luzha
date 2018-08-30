@@ -100,6 +100,9 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		},
 		checkContent(sel, re){
 			return selectAppItem(sel).html().match(re)!=null;
+		},
+		appWindow:function(){
+			return window.frames[0];
 		}
 	};
 

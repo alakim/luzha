@@ -29,8 +29,17 @@
 			log('Test button 1 clicked!');
 		}
 
+		function test2(){
+			log('Test button 2 clicked!');
+			$.get('ws1.json', function(res){
+				log(`${res.length} items received!`);
+				if(window.continuation)continuation();
+			});
+		}
+
 		$(function(){
 			$('.btT1').click(test1);
+			$('.btT2').click(test2);
 		});
 	</script>
 </head>
@@ -38,6 +47,7 @@
 	<h1>Sample Application</h1>
 	<div>
 		<button class="btT1">Test button 1</button>
+		<button class="btT2">Test button 2</button>
 	</div>
 	<div id="out"></div>
 </body>
