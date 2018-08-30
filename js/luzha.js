@@ -78,6 +78,9 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				$C.html.iframe({id:'frmApp'})
 			))
 			.find('#btStart').click(function(){
+				$('.btStartTest')
+					.removeClass('started')
+					.removeClass('performed');
 				runTest(0, true);
 			}).end()
 			.find('.btStartTest').click(function(){
@@ -114,9 +117,12 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		appWindow:function(){
 			return window.frames[0];
 		},
-		setContinuation:function(continuation){
-			Luzha.appWindow().continuation = ()=>{
-				Luzha.appWindow().continuation = null;
+		setContinuation:function(name, continuation){
+			const win = Luzha.appWindow();
+			if(!win.Luzha) win.Luzha = {};
+			const lzh = win.Luzha;
+			lzh[name] = ()=>{
+				delete lzh[name];
 				continuation();
 			};
 		}

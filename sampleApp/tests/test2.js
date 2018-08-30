@@ -2,7 +2,7 @@ Luzha.Test('Test 2', function($, $L, onComplete){
 	console.log('starting Test 2 ...');
 	$L.open('sampleApp')
 		.then(()=>new Promise(resolve=>{
-			$L.setContinuation(resolve);
+			$L.setContinuation('test2continuation', resolve);
 			$L.click('.btT2');
 		}))
 		.then(()=>{
