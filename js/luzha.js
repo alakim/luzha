@@ -39,11 +39,14 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 	function init(){
 		const {markup,h1,div,span,button} = $H;
-		$('#pnlMain').html(markup(
-			h1('Luzha v.', version)
+		$('body').html(markup(
+			div({id:'pnlMain'},
+				h1('Luzha v.', version)
+			),
+			$C.html.iframe({id:'frmApp'})
 		));
 
-		for(t of tests) t($, Luzha);
+		for(t of tests) t.action($, Luzha);
 	}
 
 	function selectAppItem(sel){
@@ -52,17 +55,23 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 	$(init);
 	const Luzha = {
-		Test:(f)=>{tests.push(f);},
-		open:(url, F)=>{
+		Test:(name, action)=>{tests.push({
+			name:name,
+			action:action
+		});},
+		selectAppItem:selectAppItem,
+		open:(url,timeout)=>new Promise((resolve, reject)=>{
 			$('#frmApp')[0].src=url;
-			setTimeout(F, 1e3);
-		},
+			setTimeout(resolve, timeout||1e3);
+		}),
+		wait:timeout=>()=>new Promise((resolve, reject)=>{
+			setTimeout(()=>{resolve()},timeout||1e3);
+		}),
 		click:(sel)=>{
 			selectAppItem(sel).click();
 		},
 		checkContent(sel, re){
-			const el = selectAppItem(sel);
-			return el.html().match(re)!=null;
+			return selectAppItem(sel).html().match(re)!=null;
 		}
 	};
 
