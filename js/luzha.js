@@ -35,7 +35,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			' .testList':{
 				padding:px(0, 15),
 				' .btStartTest':{
-					'.started':{backgroundColor:'#ffa'},
+					'.started':{backgroundColor:'#ff0'},
 					'.performed':{backgroundColor:'#0e0'}
 				}
 			}
@@ -109,7 +109,9 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			setTimeout(()=>{resolve()},timeout||1e3);
 		}),
 		click:(sel)=>{
-			selectAppItem(sel).click();
+			const el = selectAppItem(sel);
+			if(el.length) el.click();
+			else console.error(`AppItem "${sel}" not found`);
 		},
 		checkContent(sel, re){
 			return selectAppItem(sel).html().match(re)!=null;
