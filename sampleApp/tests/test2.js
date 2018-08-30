@@ -1,5 +1,5 @@
-Luzha.Test('Test 1', function($, $L, continuation){
-	console.log('starting Test 1 ...');
+Luzha.Test('Test 2', function($, $L){
+	console.log('starting Test 2 ...');
 	$L.open('sampleApp')
 		.then(()=>{
 			$L.click('.btT1');
@@ -9,8 +9,7 @@ Luzha.Test('Test 1', function($, $L, continuation){
 		.then(()=>{
 			const c1 = $L.checkContent('#out', /test\s*1/i);
 			console.log('c1: %o', c1);
-			console.log('Test 1 finished!');
+			console.log('Test 2 finished!');
 		})
-		.then(continuation)
 	;
 });

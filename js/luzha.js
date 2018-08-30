@@ -31,6 +31,9 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				fontWeight:css.bold,
 				fontSize:px(18),
 				padding:px(5)
+			},
+			' .testList':{
+				padding:px(0, 15)
 			}
 		},
 		'#frmApp':{
@@ -43,17 +46,32 @@ const Luzha = (function($,$C){const $H=$C.simple;
 	let tests = [];
 
 	function init(){
-		const {markup,h1,div,span,button} = $H;
+		const {markup,apply,h1,div,span,button} = $H;
 		$('body')
 			.html(markup(
 				div({id:'pnlMain'},
 					span({'class':'title'}, 'Luzha v.', version),
-					button({id:'btStart'}, 'Start tests')
+					button({id:'btStart'}, 'Start all tests'),
+					span({'class':'testList'},
+						apply(tests, (t,idx)=>button({'class':'btStartTest', 'data-idx':idx},
+							t.name
+						))
+					)
 				),
 				$C.html.iframe({id:'frmApp'})
 			))
 			.find('#btStart').click(function(){
-				for(t of tests) t.action($, Luzha);
+				function runTest(idx){
+					if(idx>=tests.length) return;
+					tests[idx].action($, Luzha, ()=>{
+						runTest(idx+1);
+					});
+				}
+				runTest(0);
+			}).end()
+			.find('.btStartTest').click(function(){
+				const idx = $(this).attr('data-idx');
+				tests[idx].action($, Luzha, ()=>{});
 			}).end()
 		;
 
