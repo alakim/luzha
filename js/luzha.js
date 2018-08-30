@@ -10,7 +10,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			back:'#021'
 		},
 		panel:{
-			size:{h:50}
+			size:{h:30}
 		}
 	};
 
@@ -26,7 +26,12 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		'#pnlMain':{
 			margin:0,
 			padding:px(0, 5),
-			height:px(Style.panel.size.h)
+			height:px(Style.panel.size.h),
+			' .title':{
+				fontWeight:css.bold,
+				fontSize:px(18),
+				padding:px(5)
+			}
 		},
 		'#frmApp':{
 			width:pc(100),
@@ -39,14 +44,19 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 	function init(){
 		const {markup,h1,div,span,button} = $H;
-		$('body').html(markup(
-			div({id:'pnlMain'},
-				h1('Luzha v.', version)
-			),
-			$C.html.iframe({id:'frmApp'})
-		));
+		$('body')
+			.html(markup(
+				div({id:'pnlMain'},
+					span({'class':'title'}, 'Luzha v.', version),
+					button({id:'btStart'}, 'Start tests')
+				),
+				$C.html.iframe({id:'frmApp'})
+			))
+			.find('#btStart').click(function(){
+				for(t of tests) t.action($, Luzha);
+			}).end()
+		;
 
-		for(t of tests) t.action($, Luzha);
 	}
 
 	function selectAppItem(sel){
