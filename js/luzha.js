@@ -27,10 +27,22 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			margin:0,
 			padding:px(0, 5),
 			height:px(Style.panel.size.h),
-			' .title':{
-				fontWeight:css.bold,
-				fontSize:px(18),
-				padding:px(5)
+			display:css.flex,
+			flexDirection:css.row,
+			' .logo':{
+				width:px(80),
+				textAlign: css.center,
+				' .title':{
+					fontWeight:css.bold,
+					fontSize:px(14),
+					padding:px(0)
+				},
+				' .version':{
+					fontWeight:css.normal,
+					fontSize:px(8),
+				}
+			},
+			' .controls':{
 			},
 			' .testList':{
 				padding:px(0, 15),
@@ -72,12 +84,17 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		$('body')
 			.html(markup(
 				div({id:'pnlMain'},
-					span({'class':'title'}, 'Luzha v.', version),
-					button({id:'btStart'}, 'Start all tests'),
-					span({'class':'testList'},
-						apply(tests, (t,idx)=>button({'class':'btStartTest', 'data-idx':idx},
-							t.name
-						))
+					div({'class':'logo'},
+						div({'class':'title'}, '&lambda;uzha'),
+						div({'class':'version'}, 'v.', version)
+					),
+					div({'class':'controls'},
+						button({id:'btStart'}, 'Start all tests'),
+						span({'class':'testList'},
+							apply(tests, (t,idx)=>button({'class':'btStartTest', 'data-idx':idx},
+								t.name
+							))
+						)
 					)
 				),
 				$C.html.iframe({id:'frmApp'})
