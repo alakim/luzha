@@ -36,7 +36,8 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				padding:px(0, 15),
 				' .btStartTest':{
 					'.started':{backgroundColor:'#ff0'},
-					'.performed':{backgroundColor:'#0e0'}
+					'.success':{backgroundColor:'#0e0'},
+					'.errors':{backgroundColor:'#f00'}
 				}
 			}
 		},
@@ -48,19 +49,23 @@ const Luzha = (function($,$C){const $H=$C.simple;
 	});
 
 	let tests = [];
+	let errorsOccured = false;
 
 	function init(){
 		const {markup,apply,h1,div,span,button} = $H;
 
 		function runTest(idx, continued){
+			console.log(idx, tests);
 			if(idx>=tests.length) return;
 			const testButton = $(`.btStartTest:eq(${idx})`);
-			testButton.removeClass('performed');
+			testButton.removeClass('success');
+			testButton.removeClass('errors');
 			testButton.addClass('started');
-			tests[idx].action($, Luzha, ()=>{
+			errorsOccured = false;
+			tests[idx].action($, Luzha, function(){
 				testButton.removeClass('started');
-				testButton.addClass('performed');
-				if(continued) runTest(idx+1);
+				testButton.addClass(errorsOccured?'errors':'success');
+				if(continued) runTest(idx+1, continued);
 			});
 		}
 
@@ -80,7 +85,8 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			.find('#btStart').click(function(){
 				$('.btStartTest')
 					.removeClass('started')
-					.removeClass('performed');
+					.removeClass('success')
+					.removeClass('errors');
 				runTest(0, true);
 			}).end()
 			.find('.btStartTest').click(function(){
@@ -92,6 +98,13 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 	function selectAppItem(sel){
 		return $(window.frames[0].document.body).find(sel);
+	}
+
+	function assert(cond){
+		if(!cond) errorsOccured = true;
+		//console.log('assertion arguments: %o', arguments);
+		console.assert(...arguments);
+		//console.trace();
 	}
 
 	$(init);
@@ -113,9 +126,28 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			if(el.length) el.click();
 			else console.error(`AppItem "${sel}" not found`);
 		},
-		checkContent(sel, re){
-			return selectAppItem(sel).html().match(re)!=null;
+		setValue(sel, val){
+			selectAppItem(sel).val(val);
 		},
+		checkHtml(sel, re, message){
+			const content = selectAppItem(sel).html();
+			const res = content.match(re)!=null;
+			assert(res, message||'Wrong HTML data: ', {value:content, expected:re});
+			return res;
+		},
+		checkText(sel, re, message){
+			const content = selectAppItem(sel).text();
+			const res = content.match(re)!=null;
+			assert(res, message||'Wrong text data: ', {value:content, expected:re});
+			return res;
+		},
+		checkValue(sel, expectation, message){
+			const val = selectAppItem(sel).val();
+			const res = JSON.stringify(val)==JSON.stringify(expectation);
+			assert(res, message||'Wrong value: ', {value:val, expected:expectation});
+			return res;
+		},
+		assert:assert,
 		appWindow:function(){
 			return window.frames[0];
 		},
