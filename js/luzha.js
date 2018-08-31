@@ -14,6 +14,8 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		}
 	};
 
+	const doNothing = ()=>{};
+
 	$C.css.writeStylesheet({
 		'body':{
 			margin:0,
@@ -62,12 +64,13 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 	let tests = [];
 	let errorsOccured = false;
+	let onPageLoad = doNothing;
 
 	function init(){
 		const {markup,apply,h1,div,span,button} = $H;
 
 		function runTest(idx, continued){
-			console.log(idx, tests);
+			// console.log(idx, tests);
 			if(idx>=tests.length) return;
 			const testButton = $(`.btStartTest:eq(${idx})`);
 			testButton.removeClass('success');
@@ -111,6 +114,9 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			}).end()
 		;
 
+		$('#frmApp').on('load', function(){
+			onPageLoad();
+		});
 	}
 
 	function selectAppItem(sel){
@@ -138,6 +144,17 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		wait:timeout=>()=>new Promise((resolve, reject)=>{
 			setTimeout(()=>{resolve()},timeout||1e3);
 		}),
+		waitLoading(x){
+			return ()=>{new Promise(resolve=>{
+				console.log('resolved promise');
+				onPageLoad = function(){
+					onPageLoad = doNothing;
+					console.log('!!!loaded: ', x);
+					console.log('resolving...');
+					resolve();
+				}
+			})};
+		},
 		click:(sel)=>{
 			const el = selectAppItem(sel);
 			if(el.length) el.click();
