@@ -1,0 +1,17 @@
+body{
+	background-color:#124;
+	color:#ffe;
+	font-family:Verdana, Arial, Sans-Serif;
+}
+#out{
+	background-color:#222;
+	color:#0f0;
+	font-family: Courier New, Monospace;
+	width:90%;
+	height:200px;
+	padding:5px;
+	border: 1px solid #eee;
+}
+a:link{color:#ddf}
+a:visited{color:#ddf}
+a:hover{color:#dfd}

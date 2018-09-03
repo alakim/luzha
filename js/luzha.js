@@ -4,6 +4,9 @@ const Luzha = (function($,$C){const $H=$C.simple;
 	const css = $C.css.keywords;
 	const $T = $C.css.template;
 
+	const maxWaitingTimeout = 8e3;
+	const checkTimeout = 100;
+
 	const Style = {
 		color:{
 			text:'#efe',
@@ -66,6 +69,16 @@ const Luzha = (function($,$C){const $H=$C.simple;
 	let errorsOccured = false;
 	let onPageLoad = doNothing;
 
+	let stopCurrentTest = doNothing;
+
+
+	function testStopper(testButton){
+		return function(){
+			testButton.removeClass('started');
+			testButton.addClass(errorsOccured?'errors':'success');
+		}
+	}
+
 	function init(){
 		const {markup,apply,h1,div,span,button} = $H;
 
@@ -77,9 +90,10 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			testButton.removeClass('errors');
 			testButton.addClass('started');
 			errorsOccured = false;
+
+			stopCurrentTest = testStopper(testButton);
 			tests[idx].action($, Luzha, function(){
-				testButton.removeClass('started');
-				testButton.addClass(errorsOccured?'errors':'success');
+				stopCurrentTest();
 				if(continued) runTest(idx+1, continued);
 			});
 		}
@@ -145,20 +159,41 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			setTimeout(()=>{resolve()},timeout||1e3);
 		}),
 		waitLoading(x){
-			return ()=>{new Promise(resolve=>{
-				console.log('resolved promise');
+			return ()=>new Promise(resolve=>{
 				onPageLoad = function(){
 					onPageLoad = doNothing;
-					console.log('!!!loaded: ', x);
-					console.log('resolving...');
 					resolve();
 				}
-			})};
+			});
+		},
+		waitFor(sel){
+			return ()=>new Promise((resolve,reject)=>{
+				function wait(t){
+					setTimeout(function(){
+						if(selectAppItem(sel).length){
+							resolve();
+							return;
+						}
+						if(t<maxWaitingTimeout) wait(t+checkTimeout);
+						else{
+							errorsOccured = true;
+							console.error('Waiting timeout exceeded');
+							stopCurrentTest();
+						}
+					}, checkTimeout);
+				}
+				wait(0);
+			});
 		},
 		click:(sel)=>{
 			const el = selectAppItem(sel);
-			if(el.length) el.click();
-			else console.error(`AppItem "${sel}" not found`);
+			if(!el.length) console.error(`AppItem "${sel}" not found`);
+			else{
+				if(el.prop('tagName').toUpperCase()=='A')
+					el[0].click()
+				else
+					el.click();
+			}
 		},
 		setValue(sel, val){
 			selectAppItem(sel).val(val);
