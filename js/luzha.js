@@ -1,3 +1,10 @@
+/**********************************************************
+ *
+ * Luzha - simple testing environment for web applications
+ *
+ * https://github.com/alakim/luzha
+ *
+ **********************************************************/
 const Luzha = (function($,$C){const $H=$C.simple;
 	const version = '1.1.0';
 	const {px,pc} = $C.css.unit;
@@ -158,7 +165,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		wait:timeout=>()=>new Promise((resolve, reject)=>{
 			setTimeout(()=>{resolve()},timeout||1e3);
 		}),
-		waitLoading(x){
+		waitLoading(){
 			return ()=>new Promise(resolve=>{
 				onPageLoad = function(){
 					onPageLoad = doNothing;
