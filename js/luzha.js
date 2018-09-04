@@ -24,7 +24,22 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		}
 	};
 
+	const settings = {
+		allowStartingAllTests:true
+	};
+
 	const doNothing = ()=>{};
+
+	function extend(o, S){
+		for(let k in S){
+			const v = S[k];
+			if(typeof(v)=='object')
+				extend(o[k], v);
+			else
+				o[k] = v;
+		}
+		return o;
+	}
 
 	$C.css.writeStylesheet({
 		'body':{
@@ -113,7 +128,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 						div({'class':'version'}, 'v.', version)
 					),
 					div({'class':'controls'},
-						button({id:'btStart'}, 'Start all tests'),
+						settings.allowStartingAllTests?button({id:'btStart'}, 'Start all tests'):null,
 						span({'class':'testList'},
 							apply(tests, (t,idx)=>button({'class':'btStartTest', 'data-idx':idx},
 								t.name
@@ -153,6 +168,10 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 	$(init);
 	const Luzha = {
+		settings(v){
+			if(!v) return settings;
+			extend(settings, v);
+		},
 		Test:(name, action)=>{tests.push({
 			name:name,
 			action:action
