@@ -6,6 +6,7 @@
  *
  **********************************************************/
 const Luzha = (function($,$C){const $H=$C.simple;
+	const testMode = typeof($Test)!='undefined' && $Test;
 	const version = '1.1.0';
 	const {px,pc} = $C.css.unit;
 	const css = $C.css.keywords;
@@ -102,6 +103,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 	}
 
 	function init(){
+		if(testMode) return;
 		const {markup,apply,h1,div,span,button} = $H;
 
 		function runTest(idx, continued){
@@ -256,6 +258,11 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			};
 		}
 	};
+
+	if(testMode) Luzha._internals = {
+		settings:settings
+	};
+
 
 	return Luzha;
 })(jQuery, Clarino.version('1.2.0'));

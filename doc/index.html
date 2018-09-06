@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<script>
+		const $Test = true;
+	</script>
+	<script src="../js/lib/jquery-3.1.1.min.js"></script>
+	<script src="../js/lib/clarino.min.js"></script>
+
+	<script src="../js/luzha.js"></script>
+	
+	<script src="js/doctest.js"></script>
+	<script>
+		const $sessionID = '';
+		const SessionID = '';
+
+		(function($,$C){const $H=$C.simple;
+			const {moduleDoc,file,memberDescriptions,test,Assertions,testedSample,argumentList,testResult,buildToc,displayValue} = DocTest;
+
+			function buildContent(){
+				const {markup,apply,div,span,p} = $H;
+				const {code} = $C.html;
+				$('.main').html($H.markup(
+					div({'class':'testStatistics'}),
+					div({'class':'testErrors'}),
+					div({'class':'toc'}),
+					moduleDoc('Luzha', [
+						p('Простая оболочка для интеграционного тестирования веб-приложений. Реализована в файле ', file('/js/luzha.js'), '.'),
+						memberDescriptions({
+							settings:[
+								p('Если вызвана без аргументов, возвращает текущие настройки. Для изменения настроек следует передать объект, содержащий значения изменяемых полей')
+							],
+							Test:[
+								p('Конструктор теста'),
+								argumentList({
+									name:'название теста',
+									action: span('функция, содержащая действия теста.', argumentList({
+										'$':'ссылка на модуль jQuery',
+										'$L':'ссылка на модуль Luzha',
+										onComplete:'действие, выполняемое после завершения теста'
+									}))
+								})
+							],
+							selectAppItem:[
+								'возвращает ссылку на элемент DOM тестируемого приложения',
+								argumentList({
+									sel:'селектор элемента DOM в стиле jQuery'
+								})
+							],
+							open:[
+								'открывает заданную веб-страницу, возвращает Promise, разрешающийся по истечении заданного таймаута',
+								argumentList({
+									url:'адрес страницы',
+									timeout:'таймаут (в миллисекундах) ожидания загрузки (необязательный, по умолчанию 1000мс)'
+								})
+							],
+							wait:[
+								'возвращает Promise, разрешающийся по истечении заданного таймаута',
+								argumentList({
+									timeout:'время ожидания (необязательный, по умолчанию 1000мс)'
+								})
+							],
+							waitLoading:[
+								'возвращает Promise, разрешающийся после срабатывания события загрузки очередной страницы' 
+							],
+							waitFor:[
+								'возвращает Promise, разрешающийся после появления заданного элемента веб-страницы',
+								argumentList({
+									sel:'селектор jQuery для поиска целевого элемента'
+								})
+							],
+							click:[
+								'выполняет клик на заданном элементе тестируемого веб-приложения',
+								argumentList({
+									sel:'селектор jQuery для поиска целевого элемента'
+								})
+							],
+							setValue:[
+								'устанавливает значение заданного элемента страницы тестируемого веб-приложения',
+								argumentList({
+									sel:'селектор jQuery для поиска целевого элемента',
+									val:'устанавливаемое значение'
+								})
+							],
+							checkHtml:[
+								'проверяет соответствие HTML-кода заданного элемента заданному регулярному выражению',
+								argumentList({
+									sel:'селектор jQuery для поиска целевого элемента',
+									re:'регулярное выражение для проверки',
+									message:'сообщение, выдаваемое в случае обнаружения несоответствия (необязательный)'
+								})
+							],
+							checkText:[
+								'проверяет соответствие текста заданного элемента заданному регулярному выражению',
+								argumentList({
+									sel:'селектор jQuery для поиска целевого элемента',
+									re:'регулярное выражение для проверки',
+									message:'сообщение, выдаваемое в случае обнаружения несоответствия (необязательный)'
+								})
+							],
+							checkValue:[
+								'проверяет значение заданного элемента',
+								argumentList({
+									sel:'селектор jQuery для поиска целевого элемента',
+									expectation:'ожидаемое значение',
+									message:'сообщение, выдаваемое в случае обнаружения несоответствия (необязательный)'
+								})
+							],
+							assert:[
+								'проверяет истинность логического выражения',
+								argumentList({
+									cond:'проверяемое логическое выражение'
+								})
+							],
+							appWindow:[
+								'возвращает ссылку на окно тестируемого веб-приложения'
+							],
+							setContinuation:[
+								'устанавливает обработчик заданного события',
+								argumentList({
+									name:markup('имя события. Это событие должно активироваться в коде тестируемого веб-приложения. Оно доступно в тестируемом приложении как метод объекта ', code('window.Luzha'), '.'),
+									continuation:'функция-обработчик'
+								})
+							],
+							'_internals':[
+								'Внутренние определения модуля.',
+								memberDescriptions({
+									settings:['настройки модуля', memberDescriptions({
+										allowStartingAllTests:['включает отображение кнопки для запуска всех тестов подряд. ', displayValue()]
+									})]
+								})
+							]
+						})
+					])
+				));
+
+				$('div.testStatistics').html($H.p({'class':testResult.total==testResult.success?'success':'error'},
+					'Выполнено ', testResult.total, ' тестов. Успешных: ', testResult.success, ', ошибок: ', testResult.errors, '.'
+				));
+				if(testResult.errors) $('div.testErrors').addClass('testError').html('Обнаружены ошибки выполнения тестов!');
+			}
+
+
+			$(function(){
+				$('title').html($('h1').html());
+				buildContent();
+				buildToc();
+			});
+
+		})(jQuery, Clarino.version('1.1.0'));
+	</script>
+</head>
+<body>
+	<h1>Документация и тесты</h1>
+	<div class="main"></div>
+</body>
+</html>
