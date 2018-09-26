@@ -7,7 +7,7 @@
  **********************************************************/
 const Luzha = (function($,$C){const $H=$C.simple;
 	const testMode = typeof($Test)!='undefined' && $Test;
-	const version = '1.1.0';
+	const version = '1.2.0';
 	const {px,pc} = $C.css.unit;
 	const css = $C.css.keywords;
 	const $T = $C.css.template;
@@ -104,7 +104,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 	function init(){
 		if(testMode) return;
-		const {markup,apply,h1,div,span,button} = $H;
+		const {markup,apply,a,h1,div,span,button} = $H;
 
 		function runTest(idx, continued){
 			// console.log(idx, tests);
@@ -130,6 +130,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 						div({'class':'version'}, 'v.', version)
 					),
 					div({'class':'controls'},
+						button({'class':'btDocs'}, 'Documentation'), ' ',
 						settings.allowStartingAllTests?button({id:'btStart'}, 'Start all tests'):null,
 						span({'class':'testList'},
 							apply(tests, (t,idx)=>button({'class':'btStartTest', 'data-idx':idx},
@@ -140,6 +141,9 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				),
 				$C.html.iframe({id:'frmApp'})
 			))
+			.find('.btDocs').click(function(){
+				window.open('doc');
+			}).end()
 			.find('#btStart').click(function(){
 				$('.btStartTest')
 					.removeClass('started')
