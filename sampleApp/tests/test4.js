@@ -7,7 +7,9 @@ Luzha.Test('Test 4', function($, $L, onComplete){
 		.then(()=>{
 			$L.checkText('h1', /page\s2/i);
 		})
+		.then($L.log('waiting for response'))
 		.then($L.waitFor('.response'))
+		.then($L.log('response received'))
 		.then(()=>{
 			$L.checkText('.response', /success/i);
 		})
