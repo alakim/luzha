@@ -7,7 +7,7 @@
  **********************************************************/
 const Luzha = (function($,$C){const $H=$C.simple;
 	const testMode = typeof($Test)!='undefined' && $Test;
-	const version = '1.2.1';
+	const version = '1.2.2';
 	const {px,pc} = $C.css.unit;
 	const css = $C.css.keywords;
 	const $T = $C.css.template;
@@ -221,6 +221,12 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			return ()=>{
 				console.log('%cλ%c %s', 'background-color:#0f0; color:#000;font-weight:bold;padding:5px', 'color:#fff', msg);
 			};
+		},
+		pause(msg){
+			return ()=>new Promise(resolve=>{
+				alert(msg);
+				resolve();
+			});
 		},
 		click:(sel)=>{
 			const el = selectAppItem(sel);

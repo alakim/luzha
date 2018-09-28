@@ -13,6 +13,9 @@ Luzha.Test('Test 4', function($, $L, onComplete){
 		.then(()=>{
 			$L.checkText('.response', /success/i);
 		})
+		.then($L.log('waiting for continuation...'))
+		.then($L.pause('Continue?'))
+		.then($L.log('continued!'))
 		.then(onComplete)
 	;
 });
