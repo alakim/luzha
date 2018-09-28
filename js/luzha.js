@@ -224,7 +224,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 		},
 		pause(msg){
 			return ()=>new Promise(resolve=>{
-				alert(msg);
+				alert(msg||'Continue?');
 				resolve();
 			});
 		},
