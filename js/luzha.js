@@ -7,7 +7,7 @@
  **********************************************************/
 const Luzha = (function($,$C){const $H=$C.simple;
 	const testMode = typeof($Test)!='undefined' && $Test;
-	const version = '1.2.2';
+	const version = '1.2.3';
 	const {px,pc} = $C.css.unit;
 	const css = $C.css.keywords;
 	const $T = $C.css.template;
@@ -26,7 +26,8 @@ const Luzha = (function($,$C){const $H=$C.simple;
 	};
 
 	const settings = {
-		allowStartingAllTests:true
+		allowStartingAllTests:true,
+		docRef: 'doc'
 	};
 
 	const doNothing = ()=>{};
@@ -142,7 +143,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				$C.html.iframe({id:'frmApp'})
 			))
 			.find('.btDocs').click(function(){
-				window.open('doc');
+				window.open(settings.docRef);
 			}).end()
 			.find('#btStart').click(function(){
 				$('.btStartTest')
