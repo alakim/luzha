@@ -7,7 +7,7 @@
  **********************************************************/
 const Luzha = (function($,$C){const $H=$C.simple;
 	const testMode = typeof($Test)!='undefined' && $Test;
-	const version = '1.2.3';
+	const version = '1.2.4';
 	const {px,pc} = $C.css.unit;
 	const css = $C.css.keywords;
 	const $T = $C.css.template;
@@ -31,6 +31,32 @@ const Luzha = (function($,$C){const $H=$C.simple;
 	};
 
 	const doNothing = ()=>{};
+
+	function confirmContinuation(msg){
+		const pnlSel = '#pnlMain .pnlConfirmation';
+		function clear(){
+			$(pnlSel).html('');
+		}
+		return new Promise((resolve, reject)=>{
+			const {markup,button,div} = $H;
+			$(pnlSel)
+				.html(div({'class':'frame'},
+					(msg||'Test paused'),
+					button({'class':'btContinue'}, 'Continue'),
+					button({'class':'btBreak'}, 'Break Test')
+				))
+				.find('.btContinue').click(function(){
+					clear();
+					resolve();
+				}).end()
+				.find('.btBreak').click(function(){
+					clear();
+					console.warn('Test execution aborted');
+					reject();
+				}).end()
+			;
+		});
+	}
 
 	function extend(o, S){
 		for(let k in S){
@@ -72,6 +98,19 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				}
 			},
 			' .controls':{
+			},
+			' .pnlConfirmation':{
+				minWidth:px(50),
+				' .frame':{
+					backgroundColor:'#ff0',
+					color:'#008',
+					fontWeight:css.bold,
+					padding:px(2),
+					border:$T.border(1, '#cfc'),
+					' button':{
+						margin:px(0, 3)
+					}
+				}
 			},
 			' .testList':{
 				padding:px(0, 15),
@@ -138,7 +177,8 @@ const Luzha = (function($,$C){const $H=$C.simple;
 								t.name
 							))
 						)
-					)
+					),
+					div({'class':'pnlConfirmation'})
 				),
 				$C.html.iframe({id:'frmApp'})
 			))
@@ -224,10 +264,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			};
 		},
 		pause(msg){
-			return ()=>new Promise(resolve=>{
-				alert(msg||'Continue?');
-				resolve();
-			});
+			return ()=>confirmContinuation(msg);
 		},
 		click:(sel)=>{
 			const el = selectAppItem(sel);
