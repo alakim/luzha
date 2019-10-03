@@ -263,7 +263,7 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			});
 		},
 		waitFor(sel){
-			return ()=>waitingFor(sel);
+			return ()=>Luzha.waitingFor(sel);
 		},
 		log(msg){
 			return ()=>{
