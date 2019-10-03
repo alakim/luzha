@@ -7,7 +7,7 @@
  **********************************************************/
 const Luzha = (function($,$C){const $H=$C.simple;
 	const testMode = typeof($Test)!='undefined' && $Test;
-	const version = '1.2.4';
+	const version = '1.3.0';
 	const {px,pc} = $C.css.unit;
 	const css = $C.css.keywords;
 	const $T = $C.css.template;
@@ -228,19 +228,23 @@ const Luzha = (function($,$C){const $H=$C.simple;
 			$('#frmApp')[0].src=url;
 			setTimeout(resolve, timeout||1e3);
 		}),
-		wait:timeout=>()=>new Promise((resolve, reject)=>{
+		waiting:timeout=>new Promise((resolve, reject)=>{
 			setTimeout(()=>{resolve()},timeout||1e3);
 		}),
-		waitLoading(){
-			return ()=>new Promise(resolve=>{
+		wait:timeout=>{return ()=>Luzha.waiting(timeout);},
+		waitingLoading(){
+			return new Promise(resolve=>{
 				onPageLoad = function(){
 					onPageLoad = doNothing;
 					resolve();
 				}
 			});
 		},
-		waitFor(sel){
-			return ()=>new Promise((resolve,reject)=>{
+		waitLoading(){
+			return ()=>Luzha.waitingLoading();
+		},
+		waitingFor(sel){
+			return new Promise((resolve,reject)=>{
 				function wait(t){
 					setTimeout(function(){
 						if(selectAppItem(sel).length){
@@ -257,6 +261,9 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				}
 				wait(0);
 			});
+		},
+		waitFor(sel){
+			return ()=>waitingFor(sel);
 		},
 		log(msg){
 			return ()=>{
@@ -309,7 +316,8 @@ const Luzha = (function($,$C){const $H=$C.simple;
 				delete lzh[name];
 				continuation();
 			};
-		}
+		},
+		version
 	};
 
 	if(testMode) Luzha._internals = {
@@ -318,4 +326,4 @@ const Luzha = (function($,$C){const $H=$C.simple;
 
 
 	return Luzha;
-})(jQuery, Clarino.version('1.2.0'));
+})(jQuery, Clarino.version('1.1.0'));
